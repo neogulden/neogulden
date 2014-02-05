@@ -1,9 +1,9 @@
-Building EarthCoin
+Building NeoGulden
 
-See doc/readme-qt.rst for instructions on building EarthCoin-QT,
+See doc/readme-qt.rst for instructions on building NeoGulden-QT,
 the intended-for-end-users, nice-graphical-interface, reference
-implementation of EarthCoin.
+implementation of NeoGulden.
 
-See doc/build-*.txt for instructions on building EarthCoind,
+See doc/build-*.txt for instructions on building NeoGuldend,
 the intended-for-services, no-graphical-interface, reference
-implementation of EarthCoin.
+implementation of NeoGulden.

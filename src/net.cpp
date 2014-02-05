@@ -1,7 +1,7 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
 // Copyright (c) 2009-2012 The Bitcoin developers
 // Copyright (c) 2011-2012 Litecoin Developers
-// Copyright (c) 2013 EarthCoin Developers
+// Copyright (c) 2013 NeoGulden Developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -194,7 +194,7 @@ bool RecvLine(SOCKET hSocket, string& strLine)
 void static AdvertizeLocal()
 {
     LOCK(cs_vNodes);
-    BOOST_FOREACH(CNode* pnode, vNodes)
+    BOOST_FORNLGH(CNode* pnode, vNodes)
     {
         if (pnode->fSuccessfullyConnected)
         {
@@ -439,7 +439,7 @@ CNode* FindNode(const CNetAddr& ip)
 {
     {
         LOCK(cs_vNodes);
-        BOOST_FOREACH(CNode* pnode, vNodes)
+        BOOST_FORNLGH(CNode* pnode, vNodes)
             if ((CNetAddr)pnode->addr == ip)
                 return (pnode);
     }
@@ -449,7 +449,7 @@ CNode* FindNode(const CNetAddr& ip)
 CNode* FindNode(std::string addrName)
 {
     LOCK(cs_vNodes);
-    BOOST_FOREACH(CNode* pnode, vNodes)
+    BOOST_FORNLGH(CNode* pnode, vNodes)
         if (pnode->addrName == addrName)
             return (pnode);
     return NULL;
@@ -459,7 +459,7 @@ CNode* FindNode(const CService& addr)
 {
     {
         LOCK(cs_vNodes);
-        BOOST_FOREACH(CNode* pnode, vNodes)
+        BOOST_FORNLGH(CNode* pnode, vNodes)
             if ((CService)pnode->addr == addr)
                 return (pnode);
     }
@@ -676,7 +676,7 @@ void ThreadSocketHandler2(void* parg)
             LOCK(cs_vNodes);
             // Disconnect unused nodes
             vector<CNode*> vNodesCopy = vNodes;
-            BOOST_FOREACH(CNode* pnode, vNodesCopy)
+            BOOST_FORNLGH(CNode* pnode, vNodesCopy)
             {
                 if (pnode->fDisconnect ||
                     (pnode->GetRefCount() <= 0 && pnode->vRecv.empty() && pnode->vSend.empty()))
@@ -701,7 +701,7 @@ void ThreadSocketHandler2(void* parg)
 
             // Delete disconnected nodes
             list<CNode*> vNodesDisconnectedCopy = vNodesDisconnected;
-            BOOST_FOREACH(CNode* pnode, vNodesDisconnectedCopy)
+            BOOST_FORNLGH(CNode* pnode, vNodesDisconnectedCopy)
             {
                 // wait until threads are done using it
                 if (pnode->GetRefCount() <= 0)
@@ -754,13 +754,13 @@ void ThreadSocketHandler2(void* parg)
         FD_ZERO(&fdsetError);
         SOCKET hSocketMax = 0;
 
-        BOOST_FOREACH(SOCKET hListenSocket, vhListenSocket) {
+        BOOST_FORNLGH(SOCKET hListenSocket, vhListenSocket) {
             FD_SET(hListenSocket, &fdsetRecv);
             hSocketMax = max(hSocketMax, hListenSocket);
         }
         {
             LOCK(cs_vNodes);
-            BOOST_FOREACH(CNode* pnode, vNodes)
+            BOOST_FORNLGH(CNode* pnode, vNodes)
             {
                 if (pnode->hSocket == INVALID_SOCKET)
                     continue;
@@ -798,7 +798,7 @@ void ThreadSocketHandler2(void* parg)
         //
         // Accept new connections
         //
-        BOOST_FOREACH(SOCKET hListenSocket, vhListenSocket)
+        BOOST_FORNLGH(SOCKET hListenSocket, vhListenSocket)
         if (hListenSocket != INVALID_SOCKET && FD_ISSET(hListenSocket, &fdsetRecv))
         {
 #ifdef USE_IPV6
@@ -817,7 +817,7 @@ void ThreadSocketHandler2(void* parg)
 
             {
                 LOCK(cs_vNodes);
-                BOOST_FOREACH(CNode* pnode, vNodes)
+                BOOST_FORNLGH(CNode* pnode, vNodes)
                     if (pnode->fInbound)
                         nInbound++;
             }
@@ -860,10 +860,10 @@ void ThreadSocketHandler2(void* parg)
         {
             LOCK(cs_vNodes);
             vNodesCopy = vNodes;
-            BOOST_FOREACH(CNode* pnode, vNodesCopy)
+            BOOST_FORNLGH(CNode* pnode, vNodesCopy)
                 pnode->AddRef();
         }
-        BOOST_FOREACH(CNode* pnode, vNodesCopy)
+        BOOST_FORNLGH(CNode* pnode, vNodesCopy)
         {
             if (fShutdown)
                 return;
@@ -977,7 +977,7 @@ void ThreadSocketHandler2(void* parg)
         }
         {
             LOCK(cs_vNodes);
-            BOOST_FOREACH(CNode* pnode, vNodesCopy)
+            BOOST_FORNLGH(CNode* pnode, vNodesCopy)
                 pnode->Release();
         }
 
@@ -1062,7 +1062,7 @@ void ThreadMapPort2(void* parg)
             }
         }
 
-        string strDesc = "EarthCoin " + FormatFullVersion();
+        string strDesc = "NeoGulden " + FormatFullVersion();
 #ifndef UPNPDISCOVER_SUCCESS
         /* miniupnpc 1.5 */
         r = UPNP_AddPortMapping(urls.controlURL, data.first.servicetype,
@@ -1150,7 +1150,7 @@ void MapPort()
 // The first name is used as information source for addrman.
 // The second name should resolve to a list of seed addresses.
 static const char *strDNSSeed[][2] = {
-    // {"earthcoinpool.org", "dnsseed.earthcoinpool.org"},
+    // {"neoguldenpool.org", "dnsseed.neoguldenpool.org"},
     // {"bytesized-vps.com", "dnsseed.bytesized-vps.com"},
     // {"xurious.com", "dnsseed.ltc.xurious.com"},
 };
@@ -1195,7 +1195,7 @@ void ThreadDNSAddressSeed2(void* parg)
                 vector<CAddress> vAdd;
                 if (LookupHost(strDNSSeed[seed_idx][1], vaddr))
                 {
-                    BOOST_FOREACH(CNetAddr& ip, vaddr)
+                    BOOST_FORNLGH(CNetAddr& ip, vaddr)
                     {
                         int nOneDay = 24*3600;
                         CAddress addr = CAddress(CService(ip, GetDefaultPort()));
@@ -1319,7 +1319,7 @@ void ThreadOpenConnections2(void* parg)
         for (int64 nLoop = 0;; nLoop++)
         {
             ProcessOneShot();
-            BOOST_FOREACH(string strAddr, mapMultiArgs["-connect"])
+            BOOST_FORNLGH(string strAddr, mapMultiArgs["-connect"])
             {
                 CAddress addr;
                 OpenNetworkConnection(addr, NULL, strAddr.c_str());
@@ -1383,7 +1383,7 @@ void ThreadOpenConnections2(void* parg)
         set<vector<unsigned char> > setConnected;
         {
             LOCK(cs_vNodes);
-            BOOST_FOREACH(CNode* pnode, vNodes) {
+            BOOST_FORNLGH(CNode* pnode, vNodes) {
                 if (!pnode->fInbound) {
                     setConnected.insert(pnode->addr.GetGroup());
                     nOutbound++;
@@ -1457,7 +1457,7 @@ void ThreadOpenAddedConnections2(void* parg)
 
     if (GetNameProxy()) {
         while(!fShutdown) {
-            BOOST_FOREACH(string& strAddNode, mapMultiArgs["-addnode"]) {
+            BOOST_FORNLGH(string& strAddNode, mapMultiArgs["-addnode"]) {
                 CAddress addr;
                 CSemaphoreGrant grant(*semOutbound);
                 OpenNetworkConnection(addr, &grant, strAddNode.c_str());
@@ -1471,7 +1471,7 @@ void ThreadOpenAddedConnections2(void* parg)
     }
 
     vector<vector<CService> > vservAddressesToAdd(0);
-    BOOST_FOREACH(string& strAddNode, mapMultiArgs["-addnode"])
+    BOOST_FORNLGH(string& strAddNode, mapMultiArgs["-addnode"])
     {
         vector<CService> vservNode(0);
         if(Lookup(strAddNode.c_str(), vservNode, GetDefaultPort(), fNameLookup, 0))
@@ -1479,7 +1479,7 @@ void ThreadOpenAddedConnections2(void* parg)
             vservAddressesToAdd.push_back(vservNode);
             {
                 LOCK(cs_setservAddNodeAddresses);
-                BOOST_FOREACH(CService& serv, vservNode)
+                BOOST_FORNLGH(CService& serv, vservNode)
                     setservAddNodeAddresses.insert(serv);
             }
         }
@@ -1491,9 +1491,9 @@ void ThreadOpenAddedConnections2(void* parg)
         // (keeping in mind that addnode entries can have many IPs if fNameLookup)
         {
             LOCK(cs_vNodes);
-            BOOST_FOREACH(CNode* pnode, vNodes)
+            BOOST_FORNLGH(CNode* pnode, vNodes)
                 for (vector<vector<CService> >::iterator it = vservConnectAddresses.begin(); it != vservConnectAddresses.end(); it++)
-                    BOOST_FOREACH(CService& addrNode, *(it))
+                    BOOST_FORNLGH(CService& addrNode, *(it))
                         if (pnode->addr == addrNode)
                         {
                             it = vservConnectAddresses.erase(it);
@@ -1501,7 +1501,7 @@ void ThreadOpenAddedConnections2(void* parg)
                             break;
                         }
         }
-        BOOST_FOREACH(vector<CService>& vserv, vservConnectAddresses)
+        BOOST_FORNLGH(vector<CService>& vserv, vservConnectAddresses)
         {
             CSemaphoreGrant grant(*semOutbound);
             OpenNetworkConnection(CAddress(*(vserv.begin())), &grant);
@@ -1591,7 +1591,7 @@ void ThreadMessageHandler2(void* parg)
         {
             LOCK(cs_vNodes);
             vNodesCopy = vNodes;
-            BOOST_FOREACH(CNode* pnode, vNodesCopy)
+            BOOST_FORNLGH(CNode* pnode, vNodesCopy)
                 pnode->AddRef();
         }
 
@@ -1599,7 +1599,7 @@ void ThreadMessageHandler2(void* parg)
         CNode* pnodeTrickle = NULL;
         if (!vNodesCopy.empty())
             pnodeTrickle = vNodesCopy[GetRand(vNodesCopy.size())];
-        BOOST_FOREACH(CNode* pnode, vNodesCopy)
+        BOOST_FORNLGH(CNode* pnode, vNodesCopy)
         {
             // Receive messages
             {
@@ -1622,7 +1622,7 @@ void ThreadMessageHandler2(void* parg)
 
         {
             LOCK(cs_vNodes);
-            BOOST_FOREACH(CNode* pnode, vNodesCopy)
+            BOOST_FORNLGH(CNode* pnode, vNodesCopy)
                 pnode->Release();
         }
 
@@ -1727,7 +1727,7 @@ bool BindListenPort(const CService &addrBind, string& strError)
     {
         int nErr = WSAGetLastError();
         if (nErr == WSAEADDRINUSE)
-            strError = strprintf(_("Unable to bind to %s on this computer. EarthCoin is probably already running."), addrBind.ToString().c_str());
+            strError = strprintf(_("Unable to bind to %s on this computer. NeoGulden is probably already running."), addrBind.ToString().c_str());
         else
             strError = strprintf(_("Unable to bind to %s on this computer (bind returned error %d, %s)"), addrBind.ToString().c_str(), nErr, strerror(nErr));
         printf("%s\n", strError.c_str());
@@ -1764,7 +1764,7 @@ void static Discover()
         vector<CNetAddr> vaddr;
         if (LookupHost(pszHostName, vaddr))
         {
-            BOOST_FOREACH (const CNetAddr &addr, vaddr)
+            BOOST_FORNLGH (const CNetAddr &addr, vaddr)
             {
                 AddLocal(addr, LOCAL_IF);
             }
@@ -1911,10 +1911,10 @@ public:
     ~CNetCleanup()
     {
         // Close sockets
-        BOOST_FOREACH(CNode* pnode, vNodes)
+        BOOST_FORNLGH(CNode* pnode, vNodes)
             if (pnode->hSocket != INVALID_SOCKET)
                 closesocket(pnode->hSocket);
-        BOOST_FOREACH(SOCKET hListenSocket, vhListenSocket)
+        BOOST_FORNLGH(SOCKET hListenSocket, vhListenSocket)
             if (hListenSocket != INVALID_SOCKET)
                 if (closesocket(hListenSocket) == SOCKET_ERROR)
                     printf("closesocket(hListenSocket) failed with error %d\n", WSAGetLastError());

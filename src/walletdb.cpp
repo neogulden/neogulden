@@ -54,7 +54,7 @@ int64 CWalletDB::GetAccountCreditDebit(const string& strAccount)
     ListAccountCreditDebit(strAccount, entries);
 
     int64 nCreditDebit = 0;
-    BOOST_FOREACH (const CAccountingEntry& entry, entries)
+    BOOST_FORNLGH (const CAccountingEntry& entry, entries)
         nCreditDebit += entry.nCreditDebit;
 
     return nCreditDebit;
@@ -306,7 +306,7 @@ int CWalletDB::LoadWallet(CWallet* pwallet)
         pcursor->close();
     }
 
-    BOOST_FOREACH(uint256 hash, vWalletUpgrade)
+    BOOST_FORNLGH(uint256 hash, vWalletUpgrade)
         WriteTx(hash, pwallet->mapWallet[hash]);
 
     printf("nFileVersion = %d\n", nFileVersion);

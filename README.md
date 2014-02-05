@@ -1,8 +1,8 @@
-EarthCoin (EAC) - EarthCoin is a new generation of scrypt coin that is descendant of Litecoin. Like Litecoin it uses scrypt as a proof of work scheme.
+NeoGulden (NLG) - NeoGulden is a new generation of scrypt coin that is descendant of Litecoin. Like Litecoin it uses scrypt as a proof of work scheme.
 
-EarthCoin uses yearly period. Start with 10000 coins per block, it varies in a sine curve with amplitude of 2000, with a period of one year (like the Earth moving around the Sun). This means that you start with 10000 coins, and it adjust at each block, reaches maximum of 12000 coins per block after about 3 months, then going down gradually, reaches 10000 coins per block again at about 6 months, then going down further, reaches the minimum point of 8000 coins per block at about 9 months, then start to going up, and return to 10000 coins per block at one year, before cutting half in payout.
+NeoGulden uses yearly period. Start with 10000 coins per block, it varies in a sine curve with amplitude of 2000, with a period of one year (like the Earth moving around the Sun). This means that you start with 10000 coins, and it adjust at each block, reaches maximum of 12000 coins per block after about 3 months, then going down gradually, reaches 10000 coins per block again at about 6 months, then going down further, reaches the minimum point of 8000 coins per block at about 9 months, then start to going up, and return to 10000 coins per block at one year, before cutting half in payout.
 
-EarthCoin provides superblock Awards. The following super reward zones are added:
+NeoGulden provides superblock Awards. The following super reward zones are added:
 
 Every 14 days there will be one day with X2 payout.
 Every 31 days there will be one day with X5 payout.
@@ -40,7 +40,7 @@ or are controversial.
 
 The master branch is regularly built and tested, but is not guaranteed
 to be completely stable. Tags are regularly created to indicate new
-official, stable release versions of EarthCoin.
+official, stable release versions of NeoGulden.
 
 Feature branches are created when there are major new features being
 worked on by several people.

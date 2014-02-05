@@ -2,7 +2,7 @@
 // Copyright (c) 2009-2012 The Bitcoin developers
 // Copyright (c) 2011-2012 The Litecoin Developers
 // Copyright (c) 2013 Florincoin developers
-// Copyright (c) 2013 EarthCoin developers .
+// Copyright (c) 2013 NeoGulden developers .
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -71,7 +71,7 @@ void RPCTypeCheck(const Array& params,
                   const list<Value_type>& typesExpected)
 {
     unsigned int i = 0;
-    BOOST_FOREACH(Value_type t, typesExpected)
+    BOOST_FORNLGH(Value_type t, typesExpected)
     {
         if (params.size() <= i)
             break;
@@ -89,7 +89,7 @@ void RPCTypeCheck(const Array& params,
 void RPCTypeCheck(const Object& o,
                   const map<string, Value_type>& typesExpected)
 {
-    BOOST_FOREACH(const PAIRTYPE(string, Value_type)& t, typesExpected)
+    BOOST_FORNLGH(const PAIRTYPE(string, Value_type)& t, typesExpected)
     {
         const Value& v = find_value(o, t.first);
         if (v.type() == null_type)
@@ -189,7 +189,7 @@ void WalletTxToJSON(const CWalletTx& wtx, Object& entry)
     entry.push_back(Pair("txid", wtx.GetHash().GetHex()));
     entry.push_back(Pair("time", (boost::int64_t)wtx.GetTxTime()));
 	entry.push_back(Pair("tx-comment", wtx.strTxComment));
-    BOOST_FOREACH(const PAIRTYPE(string,string)& item, wtx.mapValue)
+    BOOST_FORNLGH(const PAIRTYPE(string,string)& item, wtx.mapValue)
         entry.push_back(Pair(item.first, item.second));
 }
 
@@ -213,7 +213,7 @@ Object blockToJSON(const CBlock& block, const CBlockIndex* blockindex)
     result.push_back(Pair("version", block.nVersion));
     result.push_back(Pair("merkleroot", block.hashMerkleRoot.GetHex()));
     Array txs;
-    BOOST_FOREACH(const CTransaction&tx, block.vtx)
+    BOOST_FORNLGH(const CTransaction&tx, block.vtx)
         txs.push_back(tx.GetHash().GetHex());
     result.push_back(Pair("tx", txs));
     result.push_back(Pair("time", (boost::int64_t)block.GetBlockTime()));
@@ -286,10 +286,10 @@ Value stop(const Array& params, bool fHelp)
     if (fHelp || params.size() != 0)
         throw runtime_error(
             "stop\n"
-            "Stop EarthCoin server.");
+            "Stop NeoGulden server.");
     // Shutdown will take long enough that the response should get back
     StartShutdown();
-    return "EarthCoin server has now stopped running!";
+    return "NeoGulden server has now stopped running!";
 }
 
 
@@ -459,7 +459,7 @@ Value getnewaddress(const Array& params, bool fHelp)
     if (fHelp || params.size() > 1)
         throw runtime_error(
             "getnewaddress [account]\n"
-            "Returns a new EarthCoin address for receiving payments.  "
+            "Returns a new NeoGulden address for receiving payments.  "
             "If [account] is specified (recommended), it is added to the address book "
             "so payments received with the address will be credited to [account].");
 
@@ -502,7 +502,7 @@ CBitcoinAddress GetAccountAddress(string strAccount, bool bForceNew=false)
              ++it)
         {
             const CWalletTx& wtx = (*it).second;
-            BOOST_FOREACH(const CTxOut& txout, wtx.vout)
+            BOOST_FORNLGH(const CTxOut& txout, wtx.vout)
                 if (txout.scriptPubKey == scriptPubKey)
                     bKeyUsed = true;
         }
@@ -526,7 +526,7 @@ Value getaccountaddress(const Array& params, bool fHelp)
     if (fHelp || params.size() != 1)
         throw runtime_error(
             "getaccountaddress <account>\n"
-            "Returns the current EarthCoin address for receiving payments to this account.");
+            "Returns the current NeoGulden address for receiving payments to this account.");
 
     // Parse the account first so we don't generate a key if there's an error
     string strAccount = AccountFromValue(params[0]);
@@ -544,12 +544,12 @@ Value setaccount(const Array& params, bool fHelp)
 {
     if (fHelp || params.size() < 1 || params.size() > 2)
         throw runtime_error(
-            "setaccount <earthcoinaddress> <account>\n"
+            "setaccount <neoguldenaddress> <account>\n"
             "Sets the account associated with the given address.");
 
     CBitcoinAddress address(params[0].get_str());
     if (!address.IsValid())
-        throw JSONRPCError(-5, "Invalid EarthCoin address");
+        throw JSONRPCError(-5, "Invalid NeoGulden address");
 
 
     string strAccount;
@@ -574,12 +574,12 @@ Value getaccount(const Array& params, bool fHelp)
 {
     if (fHelp || params.size() != 1)
         throw runtime_error(
-            "getaccount <earthcoinaddress>\n"
+            "getaccount <neoguldenaddress>\n"
             "Returns the account associated with the given address.");
 
     CBitcoinAddress address(params[0].get_str());
     if (!address.IsValid())
-        throw JSONRPCError(-5, "Invalid EarthCoin address");
+        throw JSONRPCError(-5, "Invalid NeoGulden address");
 
     string strAccount;
     map<CTxDestination, string>::iterator mi = pwalletMain->mapAddressBook.find(address.Get());
@@ -600,7 +600,7 @@ Value getaddressesbyaccount(const Array& params, bool fHelp)
 
     // Find all addresses that have the given account
     Array ret;
-    BOOST_FOREACH(const PAIRTYPE(CBitcoinAddress, string)& item, pwalletMain->mapAddressBook)
+    BOOST_FORNLGH(const PAIRTYPE(CBitcoinAddress, string)& item, pwalletMain->mapAddressBook)
     {
         const CBitcoinAddress& address = item.first;
         const string& strName = item.second;
@@ -646,13 +646,13 @@ Value sendtoaddress(const Array& params, bool fHelp)
 {
     if (fHelp || params.size() < 2 || params.size() > 5)
         throw runtime_error(
-            "sendtoaddress <earthcoinaddress> <amount> [comment] [comment-to] [tx-comment]\n"
+            "sendtoaddress <neoguldenaddress> <amount> [comment] [comment-to] [tx-comment]\n"
             "<amount> is a real and is rounded to the nearest 0.00000001"
             + HelpRequiringPassphrase());
 
     CBitcoinAddress address(params[0].get_str());
     if (!address.IsValid())
-        throw JSONRPCError(-5, "Invalid EarthCoin address");
+        throw JSONRPCError(-5, "Invalid NeoGulden address");
 
     // Amount
     int64 nAmount = AmountFromValue(params[1]);
@@ -687,7 +687,7 @@ Value signmessage(const Array& params, bool fHelp)
 {
     if (fHelp || params.size() != 2)
         throw runtime_error(
-            "signmessage <earthcoinaddress> <message>\n"
+            "signmessage <neoguldenaddress> <message>\n"
             "Sign a message with the private key of an address");
 
     EnsureWalletIsUnlocked();
@@ -722,7 +722,7 @@ Value verifymessage(const Array& params, bool fHelp)
 {
     if (fHelp || params.size() != 3)
         throw runtime_error(
-            "verifymessage <earthcoinaddress> <signature> <message>\n"
+            "verifymessage <neoguldenaddress> <signature> <message>\n"
             "Verify a signed message");
 
     string strAddress  = params[0].get_str();
@@ -759,14 +759,14 @@ Value getreceivedbyaddress(const Array& params, bool fHelp)
 {
     if (fHelp || params.size() < 1 || params.size() > 2)
         throw runtime_error(
-            "getreceivedbyaddress <earthcoinaddress> [minconf=1]\n"
-            "Returns the total amount received by <earthcoinaddress> in transactions with at least [minconf] confirmations.");
+            "getreceivedbyaddress <neoguldenaddress> [minconf=1]\n"
+            "Returns the total amount received by <neoguldenaddress> in transactions with at least [minconf] confirmations.");
 
-    // EarthCoin address
+    // NeoGulden address
     CBitcoinAddress address = CBitcoinAddress(params[0].get_str());
     CScript scriptPubKey;
     if (!address.IsValid())
-        throw JSONRPCError(-5, "Invalid EarthCoin address");
+        throw JSONRPCError(-5, "Invalid NeoGulden address");
     scriptPubKey.SetDestination(address.Get());
     if (!IsMine(*pwalletMain,scriptPubKey))
         return (double)0.0;
@@ -784,7 +784,7 @@ Value getreceivedbyaddress(const Array& params, bool fHelp)
         if (wtx.IsCoinBase() || !wtx.IsFinal())
             continue;
 
-        BOOST_FOREACH(const CTxOut& txout, wtx.vout)
+        BOOST_FORNLGH(const CTxOut& txout, wtx.vout)
             if (txout.scriptPubKey == scriptPubKey)
                 if (wtx.GetDepthInMainChain() >= nMinDepth)
                     nAmount += txout.nValue;
@@ -796,7 +796,7 @@ Value getreceivedbyaddress(const Array& params, bool fHelp)
 
 void GetAccountAddresses(string strAccount, set<CTxDestination>& setAddress)
 {
-    BOOST_FOREACH(const PAIRTYPE(CTxDestination, string)& item, pwalletMain->mapAddressBook)
+    BOOST_FORNLGH(const PAIRTYPE(CTxDestination, string)& item, pwalletMain->mapAddressBook)
     {
         const CTxDestination& address = item.first;
         const string& strName = item.second;
@@ -830,7 +830,7 @@ Value getreceivedbyaccount(const Array& params, bool fHelp)
         if (wtx.IsCoinBase() || !wtx.IsFinal())
             continue;
 
-        BOOST_FOREACH(const CTxOut& txout, wtx.vout)
+        BOOST_FORNLGH(const CTxOut& txout, wtx.vout)
         {
             CTxDestination address;
             if (ExtractDestination(txout.scriptPubKey, address) && IsMine(*pwalletMain, address) && setAddress.count(address))
@@ -909,10 +909,10 @@ Value getbalance(const Array& params, bool fHelp)
             wtx.GetAmounts(allGeneratedImmature, allGeneratedMature, listReceived, listSent, allFee, strSentAccount);
             if (wtx.GetDepthInMainChain() >= nMinDepth)
             {
-                BOOST_FOREACH(const PAIRTYPE(CTxDestination,int64)& r, listReceived)
+                BOOST_FORNLGH(const PAIRTYPE(CTxDestination,int64)& r, listReceived)
                     nBalance += r.second;
             }
-            BOOST_FOREACH(const PAIRTYPE(CTxDestination,int64)& r, listSent)
+            BOOST_FORNLGH(const PAIRTYPE(CTxDestination,int64)& r, listSent)
                 nBalance -= r.second;
             nBalance -= allFee;
             nBalance += allGeneratedMature;
@@ -980,14 +980,14 @@ Value sendfrom(const Array& params, bool fHelp)
 {
     if (fHelp || params.size() < 3 || params.size() > 7)
         throw runtime_error(
-            "sendfrom <fromaccount> <toearthcoinaddress> <amount> [minconf=1] [comment] [comment-to] [tx-comment]\n"
+            "sendfrom <fromaccount> <toneoguldenaddress> <amount> [minconf=1] [comment] [comment-to] [tx-comment]\n"
             "<amount> is a real and is rounded to the nearest 0.00000001"
             + HelpRequiringPassphrase());
 
     string strAccount = AccountFromValue(params[0]);
     CBitcoinAddress address(params[1].get_str());
     if (!address.IsValid())
-        throw JSONRPCError(-5, "Invalid EarthCoin address");
+        throw JSONRPCError(-5, "Invalid NeoGulden address");
     int64 nAmount = AmountFromValue(params[2]);
     int nMinDepth = 1;
     if (params.size() > 3)
@@ -1050,11 +1050,11 @@ Value sendmany(const Array& params, bool fHelp)
     vector<pair<CScript, int64> > vecSend;
 
     int64 totalAmount = 0;
-    BOOST_FOREACH(const Pair& s, sendTo)
+    BOOST_FORNLGH(const Pair& s, sendTo)
     {
         CBitcoinAddress address(s.name_);
         if (!address.IsValid())
-            throw JSONRPCError(-5, string("Invalid EarthCoin address:")+s.name_);
+            throw JSONRPCError(-5, string("Invalid NeoGulden address:")+s.name_);
 
         if (setAddress.count(address))
             throw JSONRPCError(-8, string("Invalid parameter, duplicated address: ")+s.name_);
@@ -1097,7 +1097,7 @@ Value addmultisigaddress(const Array& params, bool fHelp)
     {
         string msg = "addmultisigaddress <nrequired> <'[\"key\",\"key\"]'> [account]\n"
             "Add a nrequired-to-sign multisignature address to the wallet\"\n"
-            "each key is a EarthCoin address or hex-encoded public key\n"
+            "each key is a NeoGulden address or hex-encoded public key\n"
             "If [account] is specified, assign address to [account].";
         throw runtime_error(msg);
     }
@@ -1121,7 +1121,7 @@ Value addmultisigaddress(const Array& params, bool fHelp)
     {
         const std::string& ks = keys[i].get_str();
 
-        // Case 1: EarthCoin address and we have full public key:
+        // Case 1: NeoGulden address and we have full public key:
         CBitcoinAddress address(ks);
         if (address.IsValid())
         {
@@ -1197,7 +1197,7 @@ Value ListReceived(const Array& params, bool fByAccounts)
         if (nDepth < nMinDepth)
             continue;
 
-        BOOST_FOREACH(const CTxOut& txout, wtx.vout)
+        BOOST_FORNLGH(const CTxOut& txout, wtx.vout)
         {
             CTxDestination address;
             if (!ExtractDestination(txout.scriptPubKey, address) || !IsMine(*pwalletMain, address))
@@ -1212,7 +1212,7 @@ Value ListReceived(const Array& params, bool fByAccounts)
     // Reply
     Array ret;
     map<string, tallyitem> mapAccountTally;
-    BOOST_FOREACH(const PAIRTYPE(CBitcoinAddress, string)& item, pwalletMain->mapAddressBook)
+    BOOST_FORNLGH(const PAIRTYPE(CBitcoinAddress, string)& item, pwalletMain->mapAddressBook)
     {
         const CBitcoinAddress& address = item.first;
         const string& strAccount = item.second;
@@ -1327,7 +1327,7 @@ void ListTransactions(const CWalletTx& wtx, const string& strAccount, int nMinDe
     // Sent
     if ((!listSent.empty() || nFee != 0) && (fAllAccounts || strAccount == strSentAccount))
     {
-        BOOST_FOREACH(const PAIRTYPE(CTxDestination, int64)& s, listSent)
+        BOOST_FORNLGH(const PAIRTYPE(CTxDestination, int64)& s, listSent)
         {
             Object entry;
             entry.push_back(Pair("account", strSentAccount));
@@ -1344,7 +1344,7 @@ void ListTransactions(const CWalletTx& wtx, const string& strAccount, int nMinDe
     // Received
     if (listReceived.size() > 0 && wtx.GetDepthInMainChain() >= nMinDepth)
     {
-        BOOST_FOREACH(const PAIRTYPE(CTxDestination, int64)& r, listReceived)
+        BOOST_FORNLGH(const PAIRTYPE(CTxDestination, int64)& r, listReceived)
         {
             string account;
             if (pwalletMain->mapAddressBook.count(r.first))
@@ -1420,7 +1420,7 @@ Value listtransactions(const Array& params, bool fHelp)
     }
     list<CAccountingEntry> acentries;
     walletdb.ListAccountCreditDebit(strAccount, acentries);
-    BOOST_FOREACH(CAccountingEntry& entry, acentries)
+    BOOST_FORNLGH(CAccountingEntry& entry, acentries)
     {
         txByTime.insert(make_pair(entry.nTime, TxPair((CWalletTx*)0, &entry)));
     }
@@ -1468,7 +1468,7 @@ Value listaccounts(const Array& params, bool fHelp)
         nMinDepth = params[0].get_int();
 
     map<string, int64> mapAccountBalances;
-    BOOST_FOREACH(const PAIRTYPE(CTxDestination, string)& entry, pwalletMain->mapAddressBook) {
+    BOOST_FORNLGH(const PAIRTYPE(CTxDestination, string)& entry, pwalletMain->mapAddressBook) {
         if (IsMine(*pwalletMain, entry.first)) // This address belongs to me
             mapAccountBalances[entry.second] = 0;
     }
@@ -1482,12 +1482,12 @@ Value listaccounts(const Array& params, bool fHelp)
         list<pair<CTxDestination, int64> > listSent;
         wtx.GetAmounts(nGeneratedImmature, nGeneratedMature, listReceived, listSent, nFee, strSentAccount);
         mapAccountBalances[strSentAccount] -= nFee;
-        BOOST_FOREACH(const PAIRTYPE(CTxDestination, int64)& s, listSent)
+        BOOST_FORNLGH(const PAIRTYPE(CTxDestination, int64)& s, listSent)
             mapAccountBalances[strSentAccount] -= s.second;
         if (wtx.GetDepthInMainChain() >= nMinDepth)
         {
             mapAccountBalances[""] += nGeneratedMature;
-            BOOST_FOREACH(const PAIRTYPE(CTxDestination, int64)& r, listReceived)
+            BOOST_FORNLGH(const PAIRTYPE(CTxDestination, int64)& r, listReceived)
                 if (pwalletMain->mapAddressBook.count(r.first))
                     mapAccountBalances[pwalletMain->mapAddressBook[r.first]] += r.second;
                 else
@@ -1497,11 +1497,11 @@ Value listaccounts(const Array& params, bool fHelp)
 
     list<CAccountingEntry> acentries;
     CWalletDB(pwalletMain->strWalletFile).ListAccountCreditDebit("*", acentries);
-    BOOST_FOREACH(const CAccountingEntry& entry, acentries)
+    BOOST_FORNLGH(const CAccountingEntry& entry, acentries)
         mapAccountBalances[entry.strAccount] += entry.nCreditDebit;
 
     Object ret;
-    BOOST_FOREACH(const PAIRTYPE(string, int64)& accountBalance, mapAccountBalances) {
+    BOOST_FORNLGH(const PAIRTYPE(string, int64)& accountBalance, mapAccountBalances) {
         ret.push_back(Pair(accountBalance.first, ValueFromAmount(accountBalance.second)));
     }
     return ret;
@@ -1813,7 +1813,7 @@ Value encryptwallet(const Array& params, bool fHelp)
     // slack space in .dat files; that is bad if the old data is
     // unencrypted private keys.  So:
     StartShutdown();
-    return "wallet encrypted; EarthCoin server stopping, restart to run with encrypted wallet";
+    return "wallet encrypted; NeoGulden server stopping, restart to run with encrypted wallet";
 }
 
 class DescribeAddressVisitor : public boost::static_visitor<Object>
@@ -1842,7 +1842,7 @@ public:
         ExtractDestinations(subscript, whichType, addresses, nRequired);
         obj.push_back(Pair("script", GetTxnOutputType(whichType)));
         Array a;
-        BOOST_FOREACH(const CTxDestination& addr, addresses)
+        BOOST_FORNLGH(const CTxDestination& addr, addresses)
             a.push_back(CBitcoinAddress(addr).ToString());
         obj.push_back(Pair("addresses", a));
         if (whichType == TX_MULTISIG)
@@ -1878,8 +1878,8 @@ Value validateaddress(const Array& params, bool fHelp)
 {
     if (fHelp || params.size() != 1)
         throw runtime_error(
-            "validateaddress <earthcoinaddress>\n"
-            "Return information about <earthcoinaddress>.");
+            "validateaddress <neoguldenaddress>\n"
+            "Return information about <neoguldenaddress>.");
 
     CBitcoinAddress address(params[0].get_str());
     bool isValid = address.IsValid();
@@ -1912,10 +1912,10 @@ Value getworkex(const Array& params, bool fHelp)
         );
 
     if (vNodes.empty())
-        throw JSONRPCError(-9, "EarthCoin is not connected!");
+        throw JSONRPCError(-9, "NeoGulden is not connected!");
 
     if (IsInitialBlockDownload())
-        throw JSONRPCError(-10, "EarthCoin is downloading blocks...");
+        throw JSONRPCError(-10, "NeoGulden is downloading blocks...");
 
     typedef map<uint256, pair<CBlock*, CScript> > mapNewBlock_t;
     static mapNewBlock_t mapNewBlock;
@@ -1936,7 +1936,7 @@ Value getworkex(const Array& params, bool fHelp)
             {
                 // Deallocate old blocks since they're obsolete now
                 mapNewBlock.clear();
-                BOOST_FOREACH(CBlock* pblock, vNewBlock)
+                BOOST_FORNLGH(CBlock* pblock, vNewBlock)
                     delete pblock;
                 vNewBlock.clear();
             }
@@ -1984,7 +1984,7 @@ Value getworkex(const Array& params, bool fHelp)
         Array merkle_arr;
         printf("DEBUG: merkle size %i\n", merkle.size());
 
-        BOOST_FOREACH(uint256 merkleh, merkle) {
+        BOOST_FORNLGH(uint256 merkleh, merkle) {
             printf("%s\n", merkleh.ToString().c_str());
             merkle_arr.push_back(HexStr(BEGIN(merkleh), END(merkleh)));
         }
@@ -2044,10 +2044,10 @@ Value getwork(const Array& params, bool fHelp)
             "If [data] is specified, tries to solve the block and returns true if it was successful.");
 
     if (vNodes.empty())
-        throw JSONRPCError(-9, "EarthCoin is not connected!");
+        throw JSONRPCError(-9, "NeoGulden is not connected!");
 
     if (IsInitialBlockDownload())
-        throw JSONRPCError(-10, "EarthCoin is downloading blocks...");
+        throw JSONRPCError(-10, "NeoGulden is downloading blocks...");
 
     typedef map<uint256, pair<CBlock*, CScript> > mapNewBlock_t;
     static mapNewBlock_t mapNewBlock;    // FIXME: thread safety
@@ -2068,7 +2068,7 @@ Value getwork(const Array& params, bool fHelp)
             {
                 // Deallocate old blocks since they're obsolete now
                 mapNewBlock.clear();
-                BOOST_FOREACH(CBlock* pblock, vNewBlock)
+                BOOST_FORNLGH(CBlock* pblock, vNewBlock)
                     delete pblock;
                 vNewBlock.clear();
             }
@@ -2176,10 +2176,10 @@ Value getblocktemplate(const Array& params, bool fHelp)
     if (strMode == "template")
     {
         if (vNodes.empty())
-            throw JSONRPCError(-9, "EarthCoin is not connected!");
+            throw JSONRPCError(-9, "NeoGulden is not connected!");
 
         if (IsInitialBlockDownload())
-            throw JSONRPCError(-10, "EarthCoin is downloading blocks...");
+            throw JSONRPCError(-10, "NeoGulden is downloading blocks...");
 
         static CReserveKey reservekey(pwalletMain);
 
@@ -2211,7 +2211,7 @@ Value getblocktemplate(const Array& params, bool fHelp)
         map<uint256, int64_t> setTxIndex;
         int i = 0;
         CTxDB txdb("r");
-        BOOST_FOREACH (CTransaction& tx, pblock->vtx)
+        BOOST_FORNLGH (CTransaction& tx, pblock->vtx)
         {
             uint256 txHash = tx.GetHash();
             setTxIndex[txHash] = i++;
@@ -2235,7 +2235,7 @@ Value getblocktemplate(const Array& params, bool fHelp)
                 entry.push_back(Pair("fee", (int64_t)(tx.GetValueIn(mapInputs) - tx.GetValueOut())));
 
                 Array deps;
-                BOOST_FOREACH (MapPrevTx::value_type& inp, mapInputs)
+                BOOST_FORNLGH (MapPrevTx::value_type& inp, mapInputs)
                 {
                     if (setTxIndex.count(inp.first))
                         deps.push_back(setTxIndex[inp.first]);
@@ -2309,7 +2309,7 @@ Value getrawmempool(const Array& params, bool fHelp)
     mempool.queryHashes(vtxid);
 
     Array a;
-    BOOST_FOREACH(const uint256& hash, vtxid)
+    BOOST_FORNLGH(const uint256& hash, vtxid)
         a.push_back(hash.ToString());
 
     return a;
@@ -2457,13 +2457,13 @@ string HTTPPost(const string& strMsg, const map<string,string>& mapRequestHeader
 {
     ostringstream s;
     s << "POST / HTTP/1.1\r\n"
-      << "User-Agent: earthcoin-json-rpc/" << FormatFullVersion() << "\r\n"
+      << "User-Agent: neogulden-json-rpc/" << FormatFullVersion() << "\r\n"
       << "Host: 127.0.0.1\r\n"
       << "Content-Type: application/json\r\n"
       << "Content-Length: " << strMsg.size() << "\r\n"
       << "Connection: close\r\n"
       << "Accept: application/json\r\n";
-    BOOST_FOREACH(const PAIRTYPE(string, string)& item, mapRequestHeaders)
+    BOOST_FORNLGH(const PAIRTYPE(string, string)& item, mapRequestHeaders)
         s << item.first << ": " << item.second << "\r\n";
     s << "\r\n" << strMsg;
 
@@ -2488,7 +2488,7 @@ static string HTTPReply(int nStatus, const string& strMsg, bool keepalive)
     if (nStatus == 401)
         return strprintf("HTTP/1.0 401 Authorization Required\r\n"
             "Date: %s\r\n"
-            "Server: earthcoin-json-rpc/%s\r\n"
+            "Server: neogulden-json-rpc/%s\r\n"
             "WWW-Authenticate: Basic realm=\"jsonrpc\"\r\n"
             "Content-Type: text/html\r\n"
             "Content-Length: 296\r\n"
@@ -2515,7 +2515,7 @@ static string HTTPReply(int nStatus, const string& strMsg, bool keepalive)
             "Connection: %s\r\n"
             "Content-Length: %d\r\n"
             "Content-Type: application/json\r\n"
-            "Server: earthcoin-json-rpc/%s\r\n"
+            "Server: neogulden-json-rpc/%s\r\n"
             "\r\n"
             "%s",
         nStatus,
@@ -2613,7 +2613,7 @@ bool HTTPAuthorized(map<string, string>& mapHeaders)
 }
 
 //
-// JSON-RPC protocol.  EarthCoin speaks version 1.0 for maximum compatibility,
+// JSON-RPC protocol.  NeoGulden speaks version 1.0 for maximum compatibility,
 // but uses JSON-RPC 1.1/2.0 standards for parts of the 1.0 standard that were
 // unspecified (HTTP errors and contents of 'error').
 //
@@ -2677,7 +2677,7 @@ bool ClientAllowed(const boost::asio::ip::address& address)
 
     const string strAddress = address.to_string();
     const vector<string>& vAllow = mapMultiArgs["-rpcallowip"];
-    BOOST_FOREACH(string strAllow, vAllow)
+    BOOST_FORNLGH(string strAllow, vAllow)
         if (WildcardMatch(strAddress, strAllow))
             return true;
     return false;
@@ -2891,7 +2891,7 @@ void ThreadRPCServer2(void* parg)
     {
         unsigned char rand_pwd[32];
         RAND_bytes(rand_pwd, 32);
-        string strWhatAmI = "To use earthcoind";
+        string strWhatAmI = "To use neoguldend";
         if (mapArgs.count("-server"))
             strWhatAmI = strprintf(_("To use the %s option"), "\"-server\"");
         else if (mapArgs.count("-daemon"))
@@ -2899,7 +2899,7 @@ void ThreadRPCServer2(void* parg)
         uiInterface.ThreadSafeMessageBox(strprintf(
             _("%s, you must set a rpcpassword in the configuration file:\n %s\n"
               "It is recommended you use the following random password:\n"
-              "rpcuser=earthcoinrpc\n"
+              "rpcuser=neoguldenrpc\n"
               "rpcpassword=%s\n"
               "(you do not need to remember this password)\n"
               "If the file does not exist, create it with owner-readable-only file permissions.\n"),
@@ -3273,7 +3273,7 @@ void ConvertTo(Value& value)
 Array RPCConvertValues(const std::string &strMethod, const std::vector<std::string> &strParams)
 {
     Array params;
-    BOOST_FOREACH(const std::string &param, strParams)
+    BOOST_FORNLGH(const std::string &param, strParams)
         params.push_back(param);
 
     int n = params.size();

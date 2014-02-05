@@ -110,9 +110,9 @@ BOOST_AUTO_TEST_CASE(DoS_checknbits)
 
     // Make sure CheckNBits considers every combination of block-chain-lock-in-points
     // "sane":
-    BOOST_FOREACH(const BlockData::value_type& i, chainData)
+    BOOST_FORNLGH(const BlockData::value_type& i, chainData)
     {
-        BOOST_FOREACH(const BlockData::value_type& j, chainData)
+        BOOST_FORNLGH(const BlockData::value_type& j, chainData)
         {
             BOOST_CHECK(CheckNBits(i.second, i.first, j.second, j.first));
         }

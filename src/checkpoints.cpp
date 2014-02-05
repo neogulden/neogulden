@@ -1,6 +1,6 @@
 // Copyright (c) 2009-2012 The Bitcoin developers
 // Copyright (c) 2011-2012 Litecoin Developers
-// Copyright (c) 2013 EarthCoin Developers
+// Copyright (c) 2013 NeoGulden Developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -47,7 +47,7 @@ namespace Checkpoints
     {
         if (fTestNet) return NULL;
 	
-        BOOST_REVERSE_FOREACH(const MapCheckpoints::value_type& i, mapCheckpoints)
+        BOOST_REVERSE_FORNLGH(const MapCheckpoints::value_type& i, mapCheckpoints)
         {
             const uint256& hash = i.second;
             std::map<uint256, CBlockIndex*>::const_iterator t = mapBlockIndex.find(hash);

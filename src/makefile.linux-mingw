@@ -70,7 +70,7 @@ OBJS= \
     obj/walletdb.o \
     obj/noui.o
 
-all: earthcoind.exe
+all: neoguldend.exe
 
 obj/scrypt.o: scrypt.c
 	i586-mingw32msvc-gcc -c $(CFLAGS) -o $@ $^
@@ -83,7 +83,7 @@ DEFS += -DHAVE_BUILD_INFO
 obj/%.o: %.cpp $(HEADERS)
 	i586-mingw32msvc-g++ -c $(CFLAGS) -o $@ $<
 
-earthcoind.exe: $(OBJS:obj/%=obj/%)
+neoguldend.exe: $(OBJS:obj/%=obj/%)
 	i586-mingw32msvc-g++ $(CFLAGS) -o $@ $(LIBPATHS) $^ $(LIBS)
 
 TESTOBJS := $(patsubst test/%.cpp,obj-test/%.o,$(wildcard test/*.cpp))
@@ -91,15 +91,15 @@ TESTOBJS := $(patsubst test/%.cpp,obj-test/%.o,$(wildcard test/*.cpp))
 obj-test/%.o: test/%.cpp $(HEADERS)
 	i586-mingw32msvc-g++ -c $(TESTDEFS) $(CFLAGS) -o $@ $<
 
-test_earthcoin.exe: $(TESTOBJS) $(filter-out obj/init.o,$(OBJS:obj/%=obj/%))
+test_neogulden.exe: $(TESTOBJS) $(filter-out obj/init.o,$(OBJS:obj/%=obj/%))
 	i586-mingw32msvc-g++ $(CFLAGS) -o $@ $(LIBPATHS) $^ -lboost_unit_test_framework $(LIBS)
 
 
 clean:
 	-rm -f obj/*.o
-	-rm -f earthcoind.exe
+	-rm -f neoguldend.exe
 	-rm -f obj-test/*.o
-	-rm -f test_earthcoin.exe
+	-rm -f test_neogulden.exe
 	-rm -f src/build.h
 
 FORCE:

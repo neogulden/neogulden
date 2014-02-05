@@ -1,7 +1,7 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
 // Copyright (c) 2009-2012 The Bitcoin developers
 // Copyright (c) 2011-2012 Litecoin Developers
-// Copyright (c) 2013 EarthCoin Developers
+// Copyright (c) 2013 NeoGulden Developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 #ifndef BITCOIN_MAIN_H
@@ -35,7 +35,7 @@ static const unsigned int MAX_TX_COMMENT_LEN = 140; // Florincoin: 128 bytes + l
 
 static const int64 MIN_TX_FEE = 1000000;
 static const int64 MIN_RELAY_TX_FEE = MIN_TX_FEE;
-static const int64 MAX_MONEY = 13500000000 * COIN; // EarthCoin: maximum of 13.5 billion coins
+static const int64 MAX_MONEY = 13500000000 * COIN; // NeoGulden: maximum of 13.5 billion coins
 static const int64 TOTAL_GENERATION = MAX_MONEY;
 static const double SERVICE_TAX_PERCENTAGE = 0.02;
 inline bool MoneyRange(int64 nValue) { return (nValue >= 0 && nValue <= MAX_MONEY); }
@@ -439,7 +439,7 @@ public:
             nBlockTime = GetAdjustedTime();
         if ((int64)nLockTime < ((int64)nLockTime < LOCKTIME_THRESHOLD ? (int64)nBlockHeight : nBlockTime))
             return true;
-        BOOST_FOREACH(const CTxIn& txin, vin)
+        BOOST_FORNLGH(const CTxIn& txin, vin)
             if (!txin.IsFinal())
                 return false;
         return true;
@@ -511,7 +511,7 @@ public:
     int64 GetValueOut() const
     {
         int64 nValueOut = 0;
-        BOOST_FOREACH(const CTxOut& txout, vout)
+        BOOST_FORNLGH(const CTxOut& txout, vout)
         {
             nValueOut += txout.nValue;
             if (!MoneyRange(txout.nValue) || !MoneyRange(nValueOut))
@@ -534,7 +534,7 @@ public:
     {
         // Large (in bytes) low-priority (new, small-coin) transactions
         // need a fee.
-        return dPriority > COIN * 1440 / 250; // EarthCoin: 1440 blocks found a day. Priority cutoff is 1 earthcoin day / 250 bytes.
+        return dPriority > COIN * 1440 / 250; // NeoGulden: 1440 blocks found a day. Priority cutoff is 1 neogulden day / 250 bytes.
     }
 
     int64 GetMinFee(unsigned int nBlockSize=1, bool fAllowFree=true, enum GetMinFee_mode mode=GMF_BLOCK) const
@@ -564,7 +564,7 @@ public:
         }
 
         // To limit dust spam, add MIN_TX_FEE/MIN_RELAY_TX_FEE for any output that is less than 0.01
-        BOOST_FOREACH(const CTxOut& txout, vout)
+        BOOST_FORNLGH(const CTxOut& txout, vout)
             if (txout.nValue < CENT)
                 nMinFee += nBaseFee;
 
@@ -898,7 +898,7 @@ public:
     uint256 BuildMerkleTree() const
     {
         vMerkleTree.clear();
-        BOOST_FOREACH(const CTransaction& tx, vtx)
+        BOOST_FORNLGH(const CTransaction& tx, vtx)
             vMerkleTree.push_back(tx.GetHash());
         int j = 0;
         for (int nSize = vtx.size(); nSize > 1; nSize = (nSize + 1) / 2)
@@ -934,7 +934,7 @@ public:
     {
         if (nIndex == -1)
             return 0;
-        BOOST_FOREACH(const uint256& otherside, vMerkleBranch)
+        BOOST_FORNLGH(const uint256& otherside, vMerkleBranch)
         {
             if (nIndex & 1)
                 hash = Hash(BEGIN(otherside), END(otherside), BEGIN(hash), END(hash));
@@ -1332,7 +1332,7 @@ public:
         // Retrace how far back it was in the sender's branch
         int nDistance = 0;
         int nStep = 1;
-        BOOST_FOREACH(const uint256& hash, vHave)
+        BOOST_FORNLGH(const uint256& hash, vHave)
         {
             std::map<uint256, CBlockIndex*>::iterator mi = mapBlockIndex.find(hash);
             if (mi != mapBlockIndex.end())
@@ -1351,7 +1351,7 @@ public:
     CBlockIndex* GetBlockIndex()
     {
         // Find the first block the caller has in the main chain
-        BOOST_FOREACH(const uint256& hash, vHave)
+        BOOST_FORNLGH(const uint256& hash, vHave)
         {
             std::map<uint256, CBlockIndex*>::iterator mi = mapBlockIndex.find(hash);
             if (mi != mapBlockIndex.end())
@@ -1367,7 +1367,7 @@ public:
     uint256 GetBlockHash()
     {
         // Find the first block the caller has in the main chain
-        BOOST_FOREACH(const uint256& hash, vHave)
+        BOOST_FORNLGH(const uint256& hash, vHave)
         {
             std::map<uint256, CBlockIndex*>::iterator mi = mapBlockIndex.find(hash);
             if (mi != mapBlockIndex.end())
@@ -1462,10 +1462,10 @@ public:
     std::string ToString() const
     {
         std::string strSetCancel;
-        BOOST_FOREACH(int n, setCancel)
+        BOOST_FORNLGH(int n, setCancel)
             strSetCancel += strprintf("%d ", n);
         std::string strSetSubVer;
-        BOOST_FOREACH(std::string str, setSubVer)
+        BOOST_FORNLGH(std::string str, setSubVer)
             strSetSubVer += "\"" + str + "\" ";
         return strprintf(
                 "CAlert(\n"
